@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1018520003510",
+    "project_id": "wildzypher-407",
+    "storage_bucket": "wildzypher-407.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018520003510:android:c3ab52031a445b5c361717",
+        "android_client_info": {
+          "package_name": "com.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBON7dLYDqd4zT7oKCbvB1hJ2w_P2o_qq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
