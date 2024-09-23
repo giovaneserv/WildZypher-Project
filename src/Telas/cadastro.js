@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 
-const App = () => {
+const Cadastro= () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default Cadastro;

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import Navbar from './Navbar';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 
-const App = () => {
+const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -15,25 +16,25 @@ const App = () => {
     };
 
     return (
-            <View style={styles.container}>
-                <View style={{height:200, justifyContent:'center'}}>
-                    <Text style={styles.title}>Bem-vindo ao </Text>
-                    <Text style={{ fontFamily: 'Jaini_Purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
-                </View>
-                
-                <View style={styles.inputs}>
-                    <Text style={{color:"white", fontSize:30}}>Email:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="E-mail"
-                        keyboardType="email-address"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                    
-                </View>
-                <View style={styles.inputs}>
-                <Text style={{color:"white", fontSize:30}}>Senha:</Text>
+        <View style={styles.container}>
+            <View style={{ height: 200, justifyContent: 'center' }}>
+                <Text style={styles.title}>Bem-vindo ao </Text>
+                <Text style={{ fontFamily: 'Jaini_Purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
+            </View>
+
+            <View style={styles.inputs}>
+                <Text style={{ color: "white", fontSize: 30 }}>Email:</Text>
+                <TextInput
+                    style={styles.input}
+                    placeholder="E-mail"
+                    keyboardType="email-address"
+                    value={email}
+                    onChangeText={setEmail}
+                />
+
+            </View>
+            <View style={styles.inputs}>
+                <Text style={{ color: "white", fontSize: 30 }}>Senha:</Text>
                 <TextInput
                     style={styles.input}
                     placeholder="Senha"
@@ -41,14 +42,14 @@ const App = () => {
                     value={password}
                     onChangeText={setPassword}
                 />
-                </View>
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Entrar</Text>
-                </TouchableOpacity>
-            
-            <Text style={{color:'white', textAlign:'center', marginTop:50 }}>Não tem conta? Cadastre-se</Text>
             </View>
-    );  
+            <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                <Text style={styles.buttonText}>Entrar</Text>
+            </TouchableOpacity>
+
+            <Text style={{ color: 'white', textAlign: 'center', marginTop: 50 }}>Não tem conta? Cadastre-se</Text>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
@@ -71,12 +72,12 @@ const styles = StyleSheet.create({
         color: 'white',
 
     },
-    inputs:{
-        marginLeft:'10%'
+    inputs: {
+        marginLeft: '10%'
     },
     input: {
         height: 50,
-        width:'90%',
+        width: '90%',
         backgroundColor: '#003B5C',
         color: 'grey',
         borderWidth: 1,
@@ -100,4 +101,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default App;
+export default Login;

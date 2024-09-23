@@ -1,24 +1,22 @@
 import React from "react";
 import { View, Text, Image, Picker, TextInput } from "react-native-web";
+import Navbar from "./Navbar";
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/FontAwesome'
 
-function perfil(){
-    const icon = <FontAwesome5 name={'trash'} />;
-    const icon2 = <FontAwesome5 name={'stepforward'} />;
-    var img = '../'
+
+function Perfil() {
+
     return (
-        <View>
-            <View>
-                <View>
-                    <Text>WildZypher</Text>
-                    <Text style={{fontSize:'100'}}>{icon}</Text>
-                    <Text style={{fontSize:'100'}}>{icon2}</Text>
-                </View>
+        <View style={{backgroundColor: '#0F1C2D', flex: 1 }}>
+            <Navbar/>
+            <View style={{flex:0.68, justifyContent: 'center', alignItems: 'center'}}>
+                <Icon style={{}} name="user-circle-o" color={'purple'} size={100}/>
+                <Text style={{textAlign:'center', color:'white'}}>Nome do Usuário</Text>
             </View>
-
         </View>
     )
 }
 
 
-export default perfil
+export default Perfil
