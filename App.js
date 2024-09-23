@@ -1,7 +1,7 @@
 import React from "react";
-import login from "./src/Telas/login";
-import cadastro from "./src/Telas/cadastro";
-import perfil from './src/Telas/perfil'
+import Login from "./src/Telas/Login";
+import Perfil from "./src/Telas/Perfil";
+import Cadastro from "./src/Telas/Cadastro";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -10,13 +10,13 @@ function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="perfil">
-        <Stack.Screen name="login" component={login}
-          options={{ title:'Tela Login', headerStyle:{display:'none'}}} />
-        <Stack.Screen name="cadastro" component={cadastro}
-          options={{ title:'Tela cadastro', headerStyle:{backgroundColor:'black'}, headerTintColor:'white' }} />
-          <Stack.Screen name='perfil' component={perfil}
-          />
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={Login}
+          options={{ title:'Login', headerStyle:{backgroundColor:'black'}, headerTintColor:'white'}} />
+        <Stack.Screen name="Cadastro" component={Cadastro}
+          options={{ title:'Perfil', headerStyle:{backgroundColor:'black'}, headerTintColor:'white' }} />
+          <Stack.Screen name='Perfil' component={Perfil}
+          options={{headerStyle:{backgroundColor:'black'}, headerTintColor:'white'}}/>
       </Stack.Navigator>
     </NavigationContainer>
 
