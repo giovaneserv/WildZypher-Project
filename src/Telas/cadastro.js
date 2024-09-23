@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
-
+import { useFonts } from "@expo-google-fonts/montserrat";
 const Cadastro= () => {
+    const [loaded, error] = useFonts({
+        'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
+    })
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -17,7 +20,7 @@ const Cadastro= () => {
     return (
             <View style={styles.container}>
                 <View style={{height:80, justifyContent:'center'}}>
-                    <Text style={{ fontFamily: 'Jaini_Purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
+                    <Text style={{ fontFamily: 'jaini-purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
                     <Text style={styles.title}>Deixe sua marca</Text>
                 </View>
                 

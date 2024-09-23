@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import Navbar from './Navbar';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
-
+import { useFonts } from '@expo-google-fonts/montserrat';
 const Login = () => {
+    const [loaded, error] = useFonts({
+        'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
+    });
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -19,7 +22,7 @@ const Login = () => {
         <View style={styles.container}>
             <View style={{ height: 200, justifyContent: 'center' }}>
                 <Text style={styles.title}>Bem-vindo ao </Text>
-                <Text style={{ fontFamily: 'Jaini_Purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
+                <Text style={{ fontFamily: 'jaini-purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
             </View>
 
             <View style={styles.inputs}>
