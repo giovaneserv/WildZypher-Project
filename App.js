@@ -12,7 +12,7 @@ function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Postar">
+      <Stack.Navigator initialRouteName="Notificacoes">
         <Stack.Screen name="Login" component={Login}
           options={{ title: 'Login', headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} />
         <Stack.Screen name="Cadastro" component={Cadastro}
@@ -20,7 +20,8 @@ function App() {
         <Stack.Screen name='Perfil' component={Perfil}
           options={{ headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} />
         <Stack.Screen name='Notificacoes' options={{ headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} component={Notificacoes} />
-        <Stack.Screen name='Postar' component={Postar} />
+        <Stack.Screen name='Postar' 
+        options={{ title:'Postar', headerStyle: { backgroundColor: 'black'} , headerTintColor: 'white' }} component={Postar} />
       </Stack.Navigator>
     </NavigationContainer>
 
