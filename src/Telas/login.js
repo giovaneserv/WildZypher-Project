@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
 import { useFonts } from '@expo-google-fonts/montserrat';
+import { useNavigation } from "@react-navigation/native";
 const Login = () => {
     const [loaded, error] = useFonts({
         'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
@@ -8,15 +9,18 @@ const Login = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
-    const handleLogin = () => {
+    const nav = useNavigation();
+    function handleLogin() {
         // Aqui você pode adicionar a lógica de autenticação
         if (email && password) {
-            Alert.alert('Login realizado com sucesso!', `E-mail: ${email}\nSenha: ${password}`);
+            nav.navigate('Feed')
         } else {
             Alert.alert('Erro', 'Por favor, preencha todos os campos.');
         }
     };
+    const cadastro = () => {
+        nav.navigate('Cadastro')
+    }
 
     return (
         <View style={styles.container}>
@@ -49,8 +53,9 @@ const Login = () => {
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Entrar</Text>
             </TouchableOpacity>
-
-            <Text style={{ color: 'white', textAlign: 'center', marginTop: 50 }}>Não tem conta? Cadastre-se</Text>
+            <TouchableOpacity onPress={cadastro} value='C'>
+                <Text style={{ color: 'white', textAlign: 'center', marginTop: 50 }}>Não tem conta? Cadastre-se</Text>
+            </TouchableOpacity>
         </View>
     );
 };
@@ -82,7 +87,7 @@ const styles = StyleSheet.create({
         height: 50,
         width: '90%',
         backgroundColor: '#003B5C',
-        color: 'grey',
+        color: 'lightgray',
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 20,

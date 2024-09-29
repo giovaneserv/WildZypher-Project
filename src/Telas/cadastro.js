@@ -1,112 +1,113 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert, SafeAreaView } from 'react-native';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import db from '../../firebase';
 import { useFonts } from "@expo-google-fonts/montserrat";
-const Cadastro= () => {
+import { collection, addDoc } from 'firebase/firestore';
+
+const Cadastro = () => {
     const [loaded, error] = useFonts({
         'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
-    })
+    });
+    
+    const [nome, setNome] = useState('');
+    const [sobrenome, setSobrenome] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [senha, setSenha] = useState('');
+    const [confirmaSenha, setConfirmaSenha] = useState('');
 
-    const handleLogin = () => {
-        // Aqui você pode adicionar a lógica de autenticação
-        if (email && password) {
-            Alert.alert('Login realizado com sucesso!', `E-mail: ${email}\nSenha: ${password}`);
-        } else {
-            Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+    const handleCadastro = async () => {
+        // Validação da senha
+        if (senha !== confirmaSenha) {
+            alert('As senhas não coincidem!');
+            return;
+        }
+
+        try {
+            const docRef = await addDoc(collection(db, "nada_absolutamente"), {
+                nome,
+                sobrenome,
+                email,
+                senha,
+            });
+            console.log("Document written with ID: ", docRef.id);
+            alert('Cadastro realizado com sucesso!');
+        } catch (e) {
+            console.error("Error adding document: ", e);
+            alert('Erro ao cadastrar. Tente novamente.');
         }
     };
 
     return (
-            <View style={styles.container}>
-                <View style={{height:80, justifyContent:'center'}}>
-                    <Text style={{ fontFamily: 'jaini-purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
-                    <Text style={styles.title}>Deixe sua marca</Text>
-                </View>
-                
-                <View style={styles.inputs}>
-                    <Text style={{color:"white", fontSize:20}}>Nome:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="nome"
-                        keyboardType="nome"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                    
-                </View>
-                <View style={styles.inputs}>
-                <Text style={{color:"white", fontSize:20}}>Sobrenome:</Text>
-                <TextInput  
+        <View style={styles.container}>
+            <View style={{ height: 80, justifyContent: 'center' }}>
+                <Text style={{ fontFamily: 'jaini-purva', textAlign: 'center', fontSize: 50, color: "white" }}>WildZypher</Text>
+                <Text style={styles.title}>Deixe sua marca</Text>
+            </View>
+
+            <View style={styles.inputs}>
+                <Text style={{ color: "white", fontSize: 20 }}>Nome:</Text>
+                <TextInput
+                    id='nome'
+                    style={styles.input}
+                    placeholder="nome"
+                    value={nome}
+                    onChangeText={setNome}
+                />
+            </View>
+            <View style={styles.inputs}>
+                <Text style={{ color: "white", fontSize: 20 }}>Sobrenome:</Text>
+                <TextInput
+                    id='sobrenome'
                     style={styles.input}
                     placeholder="Sobrenome"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
+                    value={sobrenome}
+                    onChangeText={setSobrenome}
                 />
-                </View>
-                
-                <View style={styles.inputs}>
-                    <Text style={{color:"white", fontSize:20}}>Email:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        keyboardType="nome"
-                        value={email}
-                        onChangeText={setEmail}
-                    />
-                    
-                </View>
-                <View style={styles.inputs}>
-                <Text style={{color:"white", fontSize:20}}>Senha:</Text>
-                <TextInput  
+            </View>
+            <View style={styles.inputs}>
+                <Text style={{ color: "white", fontSize: 20 }}>Email:</Text>
+                <TextInput
+                    id='email'
+                    style={styles.input}
+                    placeholder="Email"
+                    keyboardType="email-address"
+                    value={email}
+                    onChangeText={setEmail}
+                />
+            </View>
+            <View style={styles.inputs}>
+                <Text style={{ color: "white", fontSize: 20 }}>Senha:</Text>
+                <TextInput
+                    id='senha'
                     style={styles.input}
                     placeholder="senha"
                     secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
+                    value={senha}
+                    onChangeText={setSenha}
                 />
-                </View>
-                
-                <View style={styles.inputs}>
-                    <Text style={{color:"white", fontSize:20}}>Confirmar Senha:</Text>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="confirmarSenha"
-                        keyboardType="confirmarSenha"
-                        value={password}
-                        onChangeText={setEmail}
-                    />
-                    
-                </View>
-                <View style={styles.inputs}>
-                <Text style={{color:"white", fontSize:20}}>Sobrenome:</Text>
-                <TextInput  
-                    style={styles.input}
-                    placeholder="Sobrenome"
-                    secureTextEntry
-                    value={password}
-                    onChangeText={setPassword}
-                />
-                </View>
-                
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Cadastrar-se</Text>
-                </TouchableOpacity>
             </View>
-    );  
+            <View style={styles.inputs}>
+                <Text style={{ color: "white", fontSize: 20 }}>Confirmar Senha:</Text>
+                <TextInput
+                    id='confirmar_senha'
+                    style={styles.input}
+                    placeholder="confirmarSenha"
+                    secureTextEntry
+                    value={confirmaSenha}
+                    onChangeText={setConfirmaSenha}
+                />
+            </View>
+            <TouchableOpacity style={styles.button} onPress={handleCadastro}>
+                <Text style={styles.buttonText}>Cadastrar-se</Text>
+            </TouchableOpacity>
+        </View>
+    );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#0F1C2D',
-    },
-    inner: {
-        width: '80%',
-        padding: 20,
-        backgroundColor: '#0F1C2D',
-        elevation: 5,
     },
     title: {
         fontSize: 24,
@@ -115,23 +116,22 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         color: 'white',
-
     },
-    inputs:{
-        marginLeft:'10%'
+    inputs: {
+        marginLeft: '10%',
+        marginBottom: 20,
     },
     input: {
-        height: 30,
-        width:'90%',
+        height: 40,
+        width: '90%',
         backgroundColor: '#003B5C',
-        color: 'grey',
+        color: 'white',
         borderWidth: 1,
         borderRadius: 5,
-        marginBottom: 10,
         paddingHorizontal: 10,
     },
     button: {
-        backgroundColor: '#003B5C', // Cor de fundo personalizada
+        backgroundColor: '#003B5C',
         paddingVertical: 10,
         width: 100,
         height: 45,
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     buttonText: {
-        color: '#fff', // Cor do texto do botão
+        color: '#fff',
         fontSize: 16,
         fontWeight: 'bold',
         textAlign: 'center',

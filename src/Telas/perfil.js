@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, Image, TextInput, StyleSheet } from "react-native-web";
 import Navbar from "./Navbar";
 import Icon from 'react-native-vector-icons/FontAwesome'
-import { height, width } from "@fortawesome/free-solid-svg-icons/fa0";
+
 function Perfil() {
     const grafitti = require('../imgs/pexels.jpg')
     return (

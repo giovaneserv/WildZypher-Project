@@ -17,16 +17,16 @@ function Postar() {
                 </View>
                 <View style={estilos.ViewInput}>
                     <Text style={{ textAlign: 'center', fontSize: 15, color: 'white' }}>Descreva seu Projeto</Text>
-                    <TextInput style={estilos.TextInput} placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque reiciendis dolor, tenetur dicta commodi labore voluptas consequuntur eligendi repudiandae in eaque, ea, consectetur a exercitationem? Accusamus distinctio rerum debitis voluptas. Lorem ipsum dolor sit, amet consectetur adipisicing elit. " />
+                    <TextInput style={estilos.TextInput} placeholder="Lorem ipsum dolor sit amet consectetur adipisicing elit. Doloremque reiciendis dolor, tenetur dicta commodi labore voluptas consequuntur eligendi repudiandae in eaque, ea, consectetur a exercitationem? Accusamus distinctio rerum debitis voluptas. Lorem ipsum dolor sit, amet consectetur adipisicing elit. " multiline="top" />
                 </View>
-                <View style={{flexDirection:'row', justifyContent:'space-around', flex:0.20}}>
-                    
-                        <TouchableHighlight style={estilos.button}>
-                            <Text style={estilos.buttonText}>Cancelar</Text>
-                        </TouchableHighlight>
-                        <TouchableHighlight style={estilos.button}>
-                            <Text style={estilos.buttonText}>Postar</Text>
-                        </TouchableHighlight>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', flex: 0.20 }}>
+
+                    <TouchableHighlight style={estilos.button}>
+                        <Text style={estilos.buttonText}>Cancelar</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight style={estilos.button}>
+                        <Text style={estilos.buttonText}>Postar</Text>
+                    </TouchableHighlight>
                 </View>
             </View>
 
@@ -58,9 +58,10 @@ const estilos = StyleSheet.create({
         width: 320,
         borderWidth: 1,
         borderColor: 'white',
-        color: 'white'
+        color: 'white',
+        textAlignVertical:'top'
     },
-     button: {
+    button: {
         backgroundColor: '#003B5C', // Cor de fundo personalizada
         paddingVertical: 10,
         width: 100,
