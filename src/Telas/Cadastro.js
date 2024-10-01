@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import db from '../../firebase';
 import { useFonts } from "@expo-google-fonts/montserrat";
 import { collection, addDoc } from 'firebase/firestore';
 
 const Cadastro = () => {
+
     const [loaded, error] = useFonts({
         'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
     });
-    
+
     const [nome, setNome] = useState('');
     const [sobrenome, setSobrenome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmaSenha, setConfirmaSenha] = useState('');
+    const nav = useNavigation()
 
     const handleCadastro = async () => {
         // Validação da senha
@@ -23,14 +26,15 @@ const Cadastro = () => {
         }
 
         try {
-            const docRef = await addDoc(collection(db, "nada_absolutamente"), {
+            const docRef = await addDoc(collection(db, "usuarios"), {
                 nome,
                 sobrenome,
                 email,
                 senha,
             });
             console.log("Document written with ID: ", docRef.id);
-            alert('Cadastro realizado com sucesso!');
+            nav.navigate('Perfil')
+
         } catch (e) {
             console.error("Error adding document: ", e);
             alert('Erro ao cadastrar. Tente novamente.');
@@ -91,15 +95,25 @@ const Cadastro = () => {
                 <TextInput
                     id='confirmar_senha'
                     style={styles.input}
-                    placeholder="confirmarSenha"
+                    placeholder="confirmar Senha"
                     secureTextEntry
                     value={confirmaSenha}
                     onChangeText={setConfirmaSenha}
                 />
             </View>
-            <TouchableOpacity style={styles.button} onPress={handleCadastro}>
-                <Text style={styles.buttonText}>Cadastrar-se</Text>
-            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                <TouchableOpacity onPress={() => nav.navigate('Login')}>
+
+                    <Text style={{ color: 'white', marginRight: 80, fontSize: 15 }}>Login</Text>
+                </TouchableOpacity>
+
+
+                <TouchableOpacity style={styles.button} onPress={handleCadastro}>
+                    <Text style={styles.buttonText}>Cadastrar-se</Text>
+
+                </TouchableOpacity>
+            </View>
+
         </View>
     );
 };
