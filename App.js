@@ -13,14 +13,14 @@ function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Cadastro">
+      <Stack.Navigator initialRouteName="Feed">
         <Stack.Screen name="Login" component={Login}
           options={{headerShown: false, title: 'Login', headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} />
         <Stack.Screen name="Cadastro" component={Cadastro}
           options={{headerShown: false, title: 'Perfil', headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} />
         <Stack.Screen name='Perfil' component={Perfil}
           options={{headerShown: false, headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} />
-        <Stack.Screen name='Notificacoes' options={{ headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} component={Notificacoes} />
+        <Stack.Screen name='Notificacoes' options={{ headerStyle: { headerShown:false, backgroundColor: 'black' }, headerTintColor: 'white' }} component={Notificacoes} />
         <Stack.Screen name='Postar' 
         options={{headerShown: false, title:'Feed', headerStyle: { backgroundColor: 'black'} , headerTintColor: 'white' }} component={Postar} />
         <Stack.Screen name='Feed' 
