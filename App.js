@@ -13,7 +13,7 @@ function App() {
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Feed">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen name="Login" component={Login}
           options={{headerShown: false, title: 'Login', headerStyle: { backgroundColor: 'black' }, headerTintColor: 'white' }} />
         <Stack.Screen name="Cadastro" component={Cadastro}
