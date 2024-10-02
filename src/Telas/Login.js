@@ -10,42 +10,50 @@ function Login() {
 
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const nav = useNavigation();
     const [loaded, error] = useFonts({
         'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
     })
     const google = require("../../assets/google.png")
     const provider = new GoogleAuthProvider()
     const auth = getAuth();
-    function Google() {
+    const nav = useNavigation();
 
-        signInWithPopup(auth, provider)
-            .then((result) => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                // The signed-in user info.
+
+        const Google = async () => {
+            try {
+                const result = await signInWithPopup(auth, provider);
                 const user = result.user;
-                // IdP data available using getAdditionalUserInfo(result)
-                nav.navigate("Feed"); // Navega para a tela de Feed
+                await CheckUser(user.email);
+            } catch (error) {
+                console.error("Google Sign-In Error:", error);
+                alert("Failed to sign in with Google. Please try again.");
+            }
+        };
 
-                // ...
-            }).catch((error) => {
-                // Handle Errors here.
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                // The email of the user's account used.
-                const email = error.customData.email;
-                // The AuthCredential type that was used.
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                // ...
-            });
-    }
+        const CheckUser = async (email) => {
+            try {
+                const usuariosRef = collection(db, "usuarios");
+                const q = query(usuariosRef, where("email", "==", email));
+                const querySnapshot = await getDocs(q);
+    
+                if (!querySnapshot.empty) {
+                    nav.navigate("Feed");
+                } else {
+                    alert("Usuário não encontrado. Por favor, registre-se primeiro.");
+                    // Optionally navigate to registration
+                    // nav.navigate("Cadastro");
+                }
+            } catch (error) {
+                console.error("Erro ao verificar usuário:", error);
+                alert("Ocorreu um erro ao verificar o usuário. Por favor, tente novamente.");
+            }
+        };
     // [END auth_google_signin_popup_modular]
+
     async function handleLogin() {
         if (email && senha) {
             try {
-                // Cria uma consulta para buscar o usuário com email e senha fornecidos
+                // Cria a query para buscar o usuário com email e senha fornecidos
                 const q = query(
                     collection(db, 'usuarios'),
                     where('email', '==', email),
@@ -61,10 +69,10 @@ function Login() {
                     });
                     nav.navigate("Feed"); // Navega para a tela de Feed
                 } else {
-                    alert("Usuário não encontrado");
+                    alert("Usuário ou senha incorretos! ");
                 }
             } catch (error) {
-                console.error("Erro ao tentar fazer login", error);
+                console.error(error);
                 alert("Erro ao tentar fazer login. Tente novamente.");
             }
         } else {

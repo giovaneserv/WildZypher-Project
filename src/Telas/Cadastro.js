@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import db from '../../firebase';
+import {db} from '../../firebase';
 import { useFonts } from "@expo-google-fonts/montserrat";
 import { collection, addDoc } from 'firebase/firestore';
 
@@ -33,7 +33,7 @@ const Cadastro = () => {
                 senha,
             });
             console.log("Document written with ID: ", docRef.id);
-            nav.navigate('Perfil')
+            nav.navigate('Feed')
 
         } catch (e) {
             console.error("Error adding document: ", e);
