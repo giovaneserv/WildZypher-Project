@@ -1,84 +1,64 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { useFonts } from 'expo-font';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword } from 'firebase/auth';
 import { useNavigation } from "@react-navigation/native";
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 
 function Login() {
-
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [loaded, error] = useFonts({
         'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
-    })
-    const google = require("../../assets/google.png")
-    const provider = new GoogleAuthProvider()
+    });
+    const google = require("../../assets/google.png");
+    const provider = new GoogleAuthProvider();
     const auth = getAuth();
     const nav = useNavigation();
 
+    const Google = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            await CheckUser(user.email);
+        } catch (error) {
+            console.error("Google Sign-In Error:", error);
+            alert("Falha ao entrar com Google. Por favor, tente novamente.");
+        }
+    };
 
-        const Google = async () => {
-            try {
-                const result = await signInWithPopup(auth, provider);
-                const user = result.user;
-                await CheckUser(user.email);
-            } catch (error) {
-                console.error("Google Sign-In Error:", error);
-                alert("Failed to sign in with Google. Please try again.");
+    const CheckUser = async (email) => {
+        try {
+            const usuariosRef = collection(db, "usuarios");
+            const q = query(usuariosRef, where("email", "==", email));
+            const querySnapshot = await getDocs(q);
+
+            if (!querySnapshot.empty) {
+                nav.navigate("Feed");
+            } else {
+                alert("Usuário não encontrado. Por favor, registre-se primeiro.");
             }
-        };
+        } catch (error) {
+            console.error("Erro ao verificar usuário:", error);
+            alert("Ocorreu um erro ao verificar o usuário. Por favor, tente novamente.");
+        }
+    };
 
-        const CheckUser = async (email) => {
-            try {
-                const usuariosRef = collection(db, "usuarios");
-                const q = query(usuariosRef, where("email", "==", email));
-                const querySnapshot = await getDocs(q);
-    
-                if (!querySnapshot.empty) {
-                    nav.navigate("Feed");
-                } else {
-                    alert("Usuário não encontrado. Por favor, registre-se primeiro.");
-                    // Optionally navigate to registration
-                    // nav.navigate("Cadastro");
-                }
-            } catch (error) {
-                console.error("Erro ao verificar usuário:", error);
-                alert("Ocorreu um erro ao verificar o usuário. Por favor, tente novamente.");
-            }
-        };
-    // [END auth_google_signin_popup_modular]
-
-    async function handleLogin() {
+    const handleLogin = async () => {
         if (email && senha) {
             try {
-                // Cria a query para buscar o usuário com email e senha fornecidos
-                const q = query(
-                    collection(db, 'usuarios'),
-                    where('email', '==', email),
-                    where('senha', '==', senha)
-                );
-
-                // Executa a consulta e obtém os resultados
-                const querySnapshot = await getDocs(q);
-
-                if (!querySnapshot.empty) {
-                    querySnapshot.forEach((doc) => {
-                        console.log("Login bem-sucedido, ID do Documento:", doc.id);
-                    });
-                    nav.navigate("Feed"); // Navega para a tela de Feed
-                } else {
-                    alert("Usuário ou senha incorretos! ");
-                }
+                // Faz o login com email e senha
+                await signInWithEmailAndPassword(auth, email, senha);
+                nav.navigate("Feed"); // Navega para a tela de Feed
             } catch (error) {
-                console.error(error);
-                alert("Erro ao tentar fazer login. Tente novamente.");
+                console.error("Erro ao tentar fazer login:", error);
+                alert("Usuário ou senha incorretos!");
             }
         } else {
             alert("Por favor, preencha todos os campos");
         }
-    }
+    };
 
     return (
         <View style={styles.container}>
@@ -107,12 +87,7 @@ function Login() {
                     onChangeText={setSenha}
                 />
             </View>
-            <View style={styles.inputs}>
-                <TouchableOpacity onPress={Google} style={[styles.input, { flexDirection: 'row' }]}>
-                    <Image source={google} />
-                    <Text style={{ color: "white", fontSize: 20 }}> Logar com Google</Text>
-                </TouchableOpacity>
-            </View>
+           
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>Entrar</Text>
             </TouchableOpacity>

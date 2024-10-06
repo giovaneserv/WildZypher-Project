@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import {db} from '../../firebase';
-import { useFonts } from "@expo-google-fonts/montserrat";
-import { collection, addDoc } from 'firebase/firestore';
+import axios from 'axios';
+import { useFonts } from 'expo-font';
+
+import { db, auth } from '../../firebase';
+import { doc, setDoc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const Cadastro = () => {
-
     const [loaded, error] = useFonts({
         'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
     });
@@ -14,30 +16,75 @@ const Cadastro = () => {
     const [nome, setNome] = useState('');
     const [sobrenome, setSobrenome] = useState('');
     const [email, setEmail] = useState('');
+    const [telefone, setTelefone] = useState('');
+    const [cep, setCep] = useState('');
+    const [rua, setRua] = useState('');
+    const [cidade, setCidade] = useState('');
+    const [bairro, setBairro] = useState('');
+    const [estado, setEstado] = useState('');
     const [senha, setSenha] = useState('');
     const [confirmaSenha, setConfirmaSenha] = useState('');
-    const nav = useNavigation()
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const nav = useNavigation();
+
+    const BuscarCep = async (cep) => {
+        try {
+            const response = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+
+            if (response.data.erro) {
+                throw new Error('CEP não encontrado');
+            }
+
+            const { logradouro, localidade, bairro, uf } = response.data;
+            setRua(logradouro);
+            setCidade(localidade);
+            setBairro(bairro);
+            setEstado(uf);
+
+            return {
+                cep,
+                rua: logradouro,
+                cidade: localidade,
+                bairro,
+                estado: uf,
+            };
+        } catch (error) {
+            console.error('Erro ao buscar o CEP', error);
+            alert(`Erro: ${error.message}`);
+            return null;
+        }
+    };
 
     const handleCadastro = async () => {
-        // Validação da senha
+        setErrorMessage('');
+
+        // Verificar se as senhas são iguais
         if (senha !== confirmaSenha) {
-            alert('As senhas não coincidem!');
+            setErrorMessage('As senhas não coincidem!');
             return;
         }
 
         try {
-            const docRef = await addDoc(collection(db, "usuarios"), {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
+            const user = userCredential.user;
+
+            // Enviar informações ao db incluindo o uid
+            await setDoc(doc(db, 'usuarios', user.uid), {
+                uid: user.uid,  // Guardar o ID do usuário
                 nome,
                 sobrenome,
+                telefone,
                 email,
-                senha,
+                endereco: {
+                    cep, rua, bairro, cidade, estado
+                },
             });
-            console.log("Document written with ID: ", docRef.id);
-            nav.navigate('Feed')
 
-        } catch (e) {
-            console.error("Error adding document: ", e);
-            alert('Erro ao cadastrar. Tente novamente.');
+            
+
+        } catch (error) {
+            setErrorMessage('Erro ao cadastrar: ' + error.message);
         }
     };
 
@@ -49,7 +96,6 @@ const Cadastro = () => {
             </View>
 
             <View style={styles.inputs}>
-                <Text style={{ color: "white", fontSize: 20 }}>Nome:</Text>
                 <TextInput
                     id='nome'
                     style={styles.input}
@@ -59,7 +105,6 @@ const Cadastro = () => {
                 />
             </View>
             <View style={styles.inputs}>
-                <Text style={{ color: "white", fontSize: 20 }}>Sobrenome:</Text>
                 <TextInput
                     id='sobrenome'
                     style={styles.input}
@@ -69,7 +114,6 @@ const Cadastro = () => {
                 />
             </View>
             <View style={styles.inputs}>
-                <Text style={{ color: "white", fontSize: 20 }}>Email:</Text>
                 <TextInput
                     id='email'
                     style={styles.input}
@@ -80,7 +124,54 @@ const Cadastro = () => {
                 />
             </View>
             <View style={styles.inputs}>
-                <Text style={{ color: "white", fontSize: 20 }}>Senha:</Text>
+                <TextInput
+                    id='telefone'
+                    style={styles.input}
+                    placeholder="Telefone"
+                    value={telefone}
+                    onChangeText={setTelefone}
+                />
+            </View>
+            <View style={{ flexDirection: 'column', width: '80%', justifyContent: 'space-around', alignSelf: 'center' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignSelf: 'center' }}>
+                    <TextInput
+                        id='cep'
+                        style={[styles.input, { width: 150, textAlign: 'center' }]}
+                        placeholder="cep"
+                        value={cep}
+                        onChangeText={setCep}
+                        onBlur={() => BuscarCep(cep)} />
+                    <TextInput
+                        id='bairro'
+                        style={[styles.input, { width: 150, textAlign: 'center' }]}
+                        placeholder="bairro"
+                        value={bairro}
+                        onChangeText={setBairro} />
+                </View>
+                <View style={{ flexDirection: 'row', alignSelf: 'center' }}>
+                    <TextInput
+                        id='estado'
+                        style={[styles.input, { width: 150, textAlign: 'center' }]}
+                        placeholder="estado"
+                        value={estado}
+                        onChangeText={setEstado} />
+                    <TextInput
+                        id='cidade'
+                        style={[styles.input, { width: 150, textAlign: 'center' }]}
+                        placeholder="cidade"
+                        value={cidade}
+                        onChangeText={setCidade} />
+                </View>
+                <View style={{ flexDirection: 'column', alignSelf: 'center' }}>
+                    <TextInput
+                        id='rua'
+                        style={[styles.input, { width: 300, textAlign: 'center' }]}
+                        placeholder="rua"
+                        value={rua}
+                        onChangeText={setRua} />
+                </View>
+            </View>
+            <View style={styles.inputs}>
                 <TextInput
                     id='senha'
                     style={styles.input}
@@ -91,7 +182,6 @@ const Cadastro = () => {
                 />
             </View>
             <View style={styles.inputs}>
-                <Text style={{ color: "white", fontSize: 20 }}>Confirmar Senha:</Text>
                 <TextInput
                     id='confirmar_senha'
                     style={styles.input}
@@ -101,19 +191,17 @@ const Cadastro = () => {
                     onChangeText={setConfirmaSenha}
                 />
             </View>
+            {errorMessage ? (
+                <Text style={{ color: 'red', textAlign: 'center' }}>{errorMessage}</Text>
+            ) : null}
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                 <TouchableOpacity onPress={() => nav.navigate('Login')}>
-
                     <Text style={{ color: 'white', marginRight: 80, fontSize: 15 }}>Login</Text>
                 </TouchableOpacity>
-
-
                 <TouchableOpacity style={styles.button} onPress={handleCadastro}>
                     <Text style={styles.buttonText}>Cadastrar-se</Text>
-
                 </TouchableOpacity>
             </View>
-
         </View>
     );
 };
@@ -133,7 +221,7 @@ const styles = StyleSheet.create({
     },
     inputs: {
         marginLeft: '10%',
-        marginBottom: 20,
+        marginBottom: 5,
     },
     input: {
         height: 40,

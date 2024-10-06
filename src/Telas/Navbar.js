@@ -1,55 +1,70 @@
-import React from "react";
-import { View, Text, TouchableOpacity, TextInput } from "react-native-web";
-import { useFonts } from "@expo-google-fonts/montserrat";
-import Icon from 'react-native-vector-icons/FontAwesome'
+import React, { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from "@react-navigation/native";
-
+import * as Font from 'expo-font';
 
 function Navbar() {
-    const [loaded, error] = useFonts({
-        'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
-    })
-    const nav = useNavigation()
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+    const nav = useNavigation();
+
+    // Função para carregar a fonte
+    const loadFonts = async () => {
+        await Font.loadAsync({
+            'jaini-purva': require('../../assets/fonts/JainiPurva-Regular.ttf'),
+        });
+        setFontsLoaded(true);
+    };
+
+    useEffect(() => {
+        loadFonts();
+    }, []);
+
     function Navigate(Tela) {
-        if (Tela == 'bell') {
-            nav.navigate('Notificacoes')
-        } else if (Tela == 'perfil') {
-            nav.navigate('Perfil')
-        } else if (Tela == 'Feed'){
-            nav.navigate('Feed')
+        if (Tela === 'bell') {
+            nav.navigate('Notificacoes');
+        } else if (Tela === 'perfil') {
+            nav.navigate('Perfil');
+        } else if (Tela === 'Feed') {
+            nav.navigate('Feed');
         }
     }
+
+    if (!fontsLoaded) {
+        return null; // Você pode retornar um componente de carregamento aqui se desejar
+    }
+
     return (
-        <View style={{ flexDirection: 'row', borderWidth: 1, borderTop: 0, borderLeft: 0, borderRight: 0, borderColor: '#5200FF', justifyContent: 'space-around' }} >
-            <View>
-                <TouchableOpacity onPress={() => Navigate('Feed')}>
-
-                    <Text style={{ color: 'white', fontFamily: 'jaini-purva', fontSize: 20 }}>WildZypher</Text>
-                </TouchableOpacity>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <TouchableOpacity onPress={() => Navigate('bell')}>
-                        <Icon style={{ color: '#5200FF', }} size={20} name="bell" />
-                    </TouchableOpacity>
-                    <Icon style={{ color: '#5200FF', }} size={20} name="comments" />
-                    <Icon style={{ color: '#5200FF', }} size={20} name="handshake-o" />
-                    <Icon />
-                </View>
-
-            </View>
-            <View style={{ alignSelf: 'flex-end', marginBottom: 10, borderRadius: 50 }}>
-                <TextInput placeholder=" Pesquisar" style={{ backgroundColor: '#003B5C', borderRadius: 50, borderWidth: 2, borderColor: '#5200FF', color: 'grey', }} />
-
-            </View>
-            <View>
-                <TouchableOpacity onPress={() => Navigate('perfil')}>
-
-                    <Icon style={{ width: 50, height: 50, }} color={'#5200FF'} size={50} name="user-circle-o" />
-                </TouchableOpacity>
-            </View>
+        <View style={styles.navbar}>
+            <TouchableOpacity onPress={() => Navigate('Feed')}>
+                <Text style={styles.title}>WildZypher</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => Navigate('perfil')}>
+                <Icon style={styles.icon} color={'#5200FF'} size={50} name="user-circle-o" />
+            </TouchableOpacity>
         </View>
-
-    )
+    );
 }
 
+const styles = StyleSheet.create({
+    navbar: {
+        flexDirection: 'row',
+        borderWidth: 1,
+        borderTopWidth: 0,
+        borderLeftWidth: 0,
+        borderRightWidth: 0,
+        borderColor: '#5200FF',
+        justifyContent: 'space-around',
+    },
+    title: {
+        color: 'white',
+        fontFamily: 'jaini-purva',
+        fontSize: 30,
+    },
+    icon: {
+        width: 50,
+        height: 50,
+    },
+});
 
-export default Navbar
+export default Navbar;
