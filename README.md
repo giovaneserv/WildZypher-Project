@@ -132,3 +132,28 @@ Os posts podem ser alterados ou excluídos posteriormente, permitindo que os usu
 @expo/metro-runtime@3.2.3
 @fortawesome/fontawesome-svg-core@6.6.0
 `@fortawesome
+
+Componentes e bibliotecas utilizadas:
+
+├── @expo-google-fonts/inter@0.2.3
+├── @expo/metro-runtime@3.2.3
+├── @fortawesome/fontawesome-svg-core@6.6.0
+├── @fortawesome/react-native-fontawesome@0.3.2
+├── @react-navigation/native-stack@6.11.0
+├── @react-navigation/native@6.1.18
+├── axios@1.7.7
+├── expo-font@12.0.10
+├── expo-image-picker@15.0.7
+├── expo-splash-screen@0.27.5
+├── expo-status-bar@1.12.1
+├── expo@51.0.32
+├── firebase@10.9.0
+├── react-dom@18.2.0
+├── react-native-image-picker@7.1.2
+├── react-native-svg@15.7.1
+├── react-native-vector-icons@10.2.0
+├── react-native-web@0.19.12
+├── react-native@0.74.5
+└── react@18.2.0
+
+Desenvolvido por: Giovane, Eduardo e Leonardo
