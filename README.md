@@ -132,3 +132,6 @@ Utiliza o Firestore para adicionar um novo post à coleção, incluindo imagem e
 - `react-native-web@0.19.12`
 - `react@18.2.0`
 - `expo-image-picker@14.0.2`
+
+
+Uso permitido apenas para uso pessoal e acadêmico.
